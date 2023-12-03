@@ -314,6 +314,7 @@ fn main() {
         x: (1, true),
         y: (2, false),
     };
+    let point1: Point<i32> = Point::new(1, 10);
 
     let circule = Circule { radius: 1.0 };
 
@@ -364,6 +365,12 @@ struct Point<T> {
     y: T,
 }
 
+impl<T> Point<T> {
+    fn new(x: T, y: T) -> Self {
+        Point { x, y }
+    }
+}
+
 // enum E { A(f64), B(HashMap), C(Result, String>),}
 // // 这是一个声明宏，它会打印各种数据结构本身的大小，在 Option 中的大小，以及在 Result 中的大小
 // macro_rules! show_size { (header) => { println!( "{:<24} {:>4} {} {}", "Type", "T", "Option", "Result" ); println!("{}", "-".repeat(64)); }; ($t:ty) => { println!( "{:<24} {:4} {:8} {:12}", stringify!($t), size_of::<$t>(), size_of::>(), size_of::>(), ) };}
@@ -388,8 +395,8 @@ impl<'a> ImportantExcerpt<'a> {
     }
 
     fn from_part2<'b>(&self, announcement: &mut &'b str) -> &'b str
-    where
-        'a: 'b,
+        where
+            'a: 'b,
     {
         *announcement = self.part;
 
@@ -397,8 +404,8 @@ impl<'a> ImportantExcerpt<'a> {
     }
 
     fn from_part3<'b>(&'a self, announcement: &mut &'b str) -> &'b str
-    where
-        'a: 'b,
+        where
+            'a: 'b,
     {
         longest(self.part, announcement);
 
