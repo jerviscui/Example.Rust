@@ -2,6 +2,7 @@ use std::collections::HashMap;
 use std::fmt::Debug;
 use std::fs::File;
 use std::io::{Error, Read};
+use std::ops::Deref;
 use std::path::PathBuf;
 use std::vec;
 
@@ -336,6 +337,111 @@ fn main() {
     assert_eq!(None, iter.next());
     debug_assert!(iter.next().is_none());
     // assert_ne!(None, iter.next());
+
+    let v: Vec<i32> = Vec::with_capacity(5);
+    dbg!(&v);
+    dbg!(&v.capacity());
+
+    let data = vec![4, 1, 1, 2, 1, 3, 3, -2, -2, -2, 5, 5];
+    // groups:     |->|---->|->|->|--->|----------->|--->|
+    let group = Groups::new(data);
+    let p = &group;
+    assert_eq!(
+        // group.collect::<Vec<Vec<_>>>(), // or this, collect auto into_iter()
+        group.into_iter().collect::<Vec<Vec<_>>>(), // gourp moved
+        vec![
+            vec![4],
+            vec![1, 1],
+            vec![2],
+            vec![1],
+            vec![3, 3],
+            vec![-2, -2, -2],
+            vec![5, 5],
+        ]
+    );
+    // dbg!(p.inner.len());
+
+    // let u = authentication::User { name: "".to_string(), pwd: "".to_string() };
+    let mut u = authentication::User::new("123".to_string(), "abc".to_string());
+    u.set_pwd("ddd".to_string());
+    println!("{:?}", u);
+}
+
+mod authentication;
+
+struct Groups<T> {
+    inner: Vec<T>,
+}
+
+impl<T> Groups<T> {
+    fn new(inner: Vec<T>) -> Self {
+        Groups {
+            inner
+        }
+    }
+}
+
+impl<T: PartialEq+Debug+Copy> Iterator for Groups<T> {
+    type Item = Vec<T>;
+
+    // fn next(&mut self) -> Option<Self::Item> {
+    //     if  self.inner.is_empty() {
+    //         return None;
+    //     }
+    //
+    //     let inner = &self.inner;
+    //
+    //     let t = inner.get(0);
+    //
+    //     // let x1 = t.unwrap();
+    //     // let x2 = (*x1).copy();
+    //
+    //     let x:T = (*(t.unwrap())).clone();
+    //     dbg!(x);
+    //
+    //     inner.drain()
+    //     let mut result = Vec::with_capacity(inner.len() / 2);
+    //     result.push(x);
+    //
+    //     for i in 1..inner.len() {
+    //         let item = inner.get(i);
+    //         if item == t {
+    //             dbg!("push");
+    //             result.push((*(item.unwrap())).clone());
+    //         } else {
+    //             break;
+    //         }
+    //     }
+    //
+    //     Some(result)
+    // }
+
+    fn next(&mut self) -> Option<Self::Item> {
+        // if the inner vector is empty, we are done
+        if self.inner.is_empty() {
+            return None;
+        }
+
+        // lets check the span of equal items
+        let mut cursor = 1;
+        let first = &self.inner[0];
+
+        dbg!(first);
+
+        for element in &self.inner[1..] {
+            if element == first {
+                cursor += 1;
+            } else {
+                break;
+            }
+        }
+
+        // we use the `Vec::drain` to extract items up until the cursor
+        let items = self.inner.drain(0..cursor).collect();
+
+        // return the extracted items
+        Some(items)
+    }
 }
 
 fn get_area(area: &impl Area) -> f64 {
