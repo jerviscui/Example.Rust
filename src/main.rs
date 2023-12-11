@@ -5,6 +5,7 @@ use std::io::{Error, Read};
 use std::ops::Deref;
 use std::path::PathBuf;
 use std::vec;
+use regex::Regex;
 
 mod marco;
 mod test;
@@ -365,8 +366,49 @@ fn main() {
     let mut u = authentication::User::new("123".to_string(), "abc".to_string());
     u.set_pwd("ddd".to_string());
     println!("{:?}", u);
+
+    let regex = Regex::new(r"^\d{4}-\d{2}-\d{2}$").unwrap();
+    println!("{}", regex.is_match("2020-01-01"));
+
+    add(1, 2);
 }
 
+/// Generally, the first line is a brief summary describing the function.
+///
+/// The next lines present detailed documentation.
+/// Code blocks start with triple backticks. The code has an implicit `fn main()` inside and `extern crate <cratename>`,
+/// which means you can just start writing code.
+///
+/// # Examples
+///
+/// ```
+/// let result = basic_math::add(2, 3);
+/// assert_eq!(result, 5);
+/// ```
+pub fn add(a: i32, b: i32) -> i32 {
+    a + b
+}
+
+#[cfg(test)]
+mod add_function_tests{
+    // use crate::add;
+    use super::*;
+
+    #[test]
+    fn add_works() {
+        assert_eq!(add(1, 2), 3);
+        assert_eq!(add(10, 12), 22);
+        assert_eq!(add(5, -2), 3);
+    }
+
+    #[test]
+    #[should_panic]
+    fn add_fails() {
+        assert_eq!(add(2, 2), 7);
+    }
+}
+
+mod math_even;
 mod authentication;
 
 struct Groups<T> {
