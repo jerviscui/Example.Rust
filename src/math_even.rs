@@ -10,7 +10,8 @@
 /// # Examples
 ///
 /// ```
-/// assert_eq!(is_even(2), true);
+/// use scrape_url::math_even;
+/// assert_eq!(math_even::is_even(2), true);
 /// ```
 pub fn is_even(num: i32) -> bool {
     num % 2 == 0

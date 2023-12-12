@@ -371,6 +371,8 @@ fn main() {
     println!("{}", regex.is_match("2020-01-01"));
 
     add(1, 2);
+
+    eprintln!("u = {:?}", u);
 }
 
 /// Generally, the first line is a brief summary describing the function.
