@@ -1,3 +1,17 @@
+///
+///
+/// # Arguments
+///
+/// * `num`:
+/// * `x`:
+///
+/// returns: bool
+///
+/// # Examples
+///
+/// ```
+/// assert_eq!(is_even(2), true);
+/// ```
 pub fn is_even(num: i32) -> bool {
     num % 2 == 0
 }
