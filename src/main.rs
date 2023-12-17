@@ -9,6 +9,7 @@ use regex::Regex;
 
 mod marco;
 mod test;
+mod file_tests;
 
 fn main() {
     let a = ();
