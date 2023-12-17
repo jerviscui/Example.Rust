@@ -194,8 +194,15 @@ fn main() {
 
     let mut greeting = String::from("hello");
     let greeting_reference = &mut greeting;
-    *greeting_reference = String::from("world");
+    // *greeting_reference = String::from("world");
+    greeting_reference.push('!');
     println!("Greeting: {}", greeting);
+
+    let mut mut_ref = &greeting;
+    println!("variate={:p} first ={:p}", &mut_ref, mut_ref);
+    let binding = String::from("world");
+    mut_ref = &binding;
+    println!("variate={:p} second={:p}", &mut_ref, mut_ref);
 
     let mut a = 1;
     let b = &a;
@@ -392,7 +399,7 @@ pub fn add(a: i32, b: i32) -> i32 {
 }
 
 #[cfg(test)]
-mod add_function_tests{
+mod add_function_tests {
     // use crate::add;
     use super::*;
 
@@ -425,7 +432,7 @@ impl<T> Groups<T> {
     }
 }
 
-impl<T: PartialEq+Debug+Copy> Iterator for Groups<T> {
+impl<T: PartialEq + Debug + Copy> Iterator for Groups<T> {
     type Item = Vec<T>;
 
     // fn next(&mut self) -> Option<Self::Item> {
