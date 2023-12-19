@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::fmt::Debug;
 use std::fs::File;
 use std::io::{Error, Read};
-use std::ops::Deref;
+use std::ops::{Deref, DerefMut};
 use std::path::PathBuf;
 use std::vec;
 use regex::Regex;
@@ -10,6 +10,12 @@ use regex::Regex;
 mod marco;
 mod test;
 mod file_tests;
+
+mod developers;
+use developers::Developer;
+
+mod derefs;
+use derefs::MyBox;
 
 fn main() {
     let a = ();
@@ -42,10 +48,19 @@ fn main() {
         remote: false,
     };
 
-    // ((((([[{{{{{{}}}}}}]])))))
-    // ((((((((((((()))))))))))))
-    // [[[[[[[[[[[[[]]]]]]]]]]]]]
-    println!("{} {} {}", student3.name, student3.level, student3.remote);
+    let student3_nonemove = Student3 {
+        name: "student3".to_string(),
+        ..student3
+    };
+    println!("nonemove: {} {} {}", student3.name, student3.level, student3.remote);
+
+    let student3_move = Student3 {
+        level: 1,
+        ..student3
+    };
+    // error[E0382]: borrow of moved value: `student3.name`
+    // println!("{} {} {}", student3.name, student3.level, student3.remote);
+    println!("move: {} {}", student3.level, student3.remote);
 
     let s = Student3 {
         name: "student3".to_string(),
@@ -348,6 +363,8 @@ fn main() {
     // assert_ne!(None, iter.next());
 
     let v: Vec<i32> = Vec::with_capacity(5);
+    let v = dbg!(v);
+
     dbg!(&v);
     dbg!(&v.capacity());
 
@@ -381,6 +398,45 @@ fn main() {
     add(1, 2);
 
     eprintln!("u = {:?}", u);
+
+    // 使用 T::default()
+    let dev1 = Developer::default();
+    // 使用 Default::default()，但此时类型无法通过上下文推断，需要提供类型
+    let dev2: Developer = Default::default();
+    // 使用 T::new
+    let dev3 = Developer::new("Tyr");
+    println!("dev1: {:?}\ndev2: {:?}\ndev3: {:?}", dev1, dev2, dev3);
+
+    let rect1 = Rectangle {
+        width: 30,
+        height: 50,
+    };
+
+    println!("The area of the rectangle is {} square pixels.", rect1.area());
+
+    let x = 5;
+    let y = MyBox::new(x);
+
+    assert_eq!(5, x);
+    assert_eq!(5, *y);
+
+    let twice = MyBox::new(y);
+    // assert_eq!(5, *twice); // error[E0277]: can't compare `{integer}` with `MyBox<{integer}>`
+    // assert_eq!(5, *(twice.deref()));
+    assert_eq!(5, **twice);
+    assert_eq!(5, **twice.deref());
+}
+
+#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+impl Rectangle {
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
 }
 
 /// Generally, the first line is a brief summary describing the function.
