@@ -387,8 +387,8 @@ fn main() {
     );
     // dbg!(p.inner.len());
 
-    // let u = authentication::User { name: "".to_string(), pwd: "".to_string() };
-    let mut u = authentication::User::new("123".to_string(), "abc".to_string());
+    // let u = User { name: "".to_string(), pwd: "".to_string() };
+    let mut u = User::new("123".to_string(), "abc".to_string());
     u.set_pwd("ddd".to_string());
     println!("{:?}", u);
 
@@ -425,6 +425,15 @@ fn main() {
     // assert_eq!(5, *(twice.deref()));
     assert_eq!(5, **twice);
     assert_eq!(5, **twice.deref());
+
+    let box_string = MyBox::new(String::from("world"));
+    speak(&box_string);
+    speak(&(*box_string)[..]);
+    speak(&(*(*box_string)));
+}
+
+fn speak(name: &str) {
+    println!("Hello, {name}!");
 }
 
 #[derive(Debug)]
@@ -476,6 +485,7 @@ mod add_function_tests {
 
 mod math_even;
 mod authentication;
+use authentication::User;
 
 struct Groups<T> {
     inner: Vec<T>,
