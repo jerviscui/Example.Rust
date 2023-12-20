@@ -12,9 +12,11 @@ mod test;
 mod file_tests;
 
 mod developers;
+
 use developers::Developer;
 
 mod derefs;
+
 use derefs::MyBox;
 
 fn main() {
@@ -430,6 +432,20 @@ fn main() {
     speak(&box_string);
     speak(&(*box_string)[..]);
     speak(&(*(*box_string)));
+
+    let rec = Some(Rectangle {
+        width: 1,
+        height: 2,
+    });
+
+    let option1 = rec.map(|mut r| {
+        r.width = 10;
+        r
+    });
+
+    // error[E0382]: borrow of moved value: `rec`
+    // println!("{:?}", rec);
+    println!("{:?}", option1);
 }
 
 fn speak(name: &str) {
@@ -485,6 +501,7 @@ mod add_function_tests {
 
 mod math_even;
 mod authentication;
+
 use authentication::User;
 
 struct Groups<T> {
