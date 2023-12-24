@@ -1,3 +1,4 @@
+use regex::Regex;
 use std::collections::HashMap;
 use std::fmt::Debug;
 use std::fs::File;
@@ -5,11 +6,10 @@ use std::io::{Error, Read};
 use std::ops::{Deref, DerefMut};
 use std::path::PathBuf;
 use std::vec;
-use regex::Regex;
 
+mod file_tests;
 mod marco;
 mod test;
-mod file_tests;
 
 mod developers;
 
@@ -18,6 +18,13 @@ use developers::Developer;
 mod derefs;
 
 use derefs::MyBox;
+
+// #[cfg(not(target_env = "msvc"))]
+// use tikv_jemallocator::Jemalloc;
+
+// #[cfg(not(target_env = "msvc"))]
+// #[global_allocator]
+// static GLOBAL: Jemalloc = Jemalloc;
 
 fn main() {
     let a = ();
@@ -54,7 +61,10 @@ fn main() {
         name: "student3".to_string(),
         ..student3
     };
-    println!("nonemove: {} {} {}", student3.name, student3.level, student3.remote);
+    println!(
+        "nonemove: {} {} {}",
+        student3.name, student3.level, student3.remote
+    );
 
     let student3_move = Student3 {
         level: 1,
@@ -414,7 +424,10 @@ fn main() {
         height: 50,
     };
 
-    println!("The area of the rectangle is {} square pixels.", rect1.area());
+    println!(
+        "The area of the rectangle is {} square pixels.",
+        rect1.area()
+    );
 
     let x = 5;
     let y = MyBox::new(x);
@@ -499,8 +512,8 @@ mod add_function_tests {
     }
 }
 
-mod math_even;
 mod authentication;
+mod math_even;
 
 use authentication::User;
 
@@ -510,9 +523,7 @@ struct Groups<T> {
 
 impl<T> Groups<T> {
     fn new(inner: Vec<T>) -> Self {
-        Groups {
-            inner
-        }
+        Groups { inner }
     }
 }
 
@@ -636,8 +647,8 @@ impl<'a> ImportantExcerpt<'a> {
     }
 
     fn from_part2<'b>(&self, announcement: &mut &'b str) -> &'b str
-        where
-            'a: 'b,
+    where
+        'a: 'b,
     {
         *announcement = self.part;
 
@@ -645,8 +656,8 @@ impl<'a> ImportantExcerpt<'a> {
     }
 
     fn from_part3<'b>(&'a self, announcement: &mut &'b str) -> &'b str
-        where
-            'a: 'b,
+    where
+        'a: 'b,
     {
         longest(self.part, announcement);
 

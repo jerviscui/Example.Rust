@@ -7,3 +7,6 @@ edition = "2021"
 
 [dependencies]
 regex = "1.10.2"
+
+# [target.'cfg(not(target_env = "msvc"))'.dependencies]
+# tikv-jemallocator = "0.5"
