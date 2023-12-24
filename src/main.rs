@@ -5,7 +5,7 @@ use std::fs::File;
 use std::io::{Error, Read};
 use std::ops::{Deref, DerefMut};
 use std::path::PathBuf;
-use std::vec;
+use std::{backtrace, vec};
 
 mod file_tests;
 mod marco;
@@ -25,6 +25,8 @@ use derefs::MyBox;
 // #[cfg(not(target_env = "msvc"))]
 // #[global_allocator]
 // static GLOBAL: Jemalloc = Jemalloc;
+
+mod trait_tests;
 
 fn main() {
     let a = ();
@@ -459,6 +461,9 @@ fn main() {
     // error[E0382]: borrow of moved value: `rec`
     // println!("{:?}", rec);
     println!("{:?}", option1);
+
+    let result: Result<i64, std::fmt::Error> =
+        <i32 as trait_tests::Associated>::parse("some input");
 }
 
 fn speak(name: &str) {
