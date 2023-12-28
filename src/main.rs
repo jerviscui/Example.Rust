@@ -27,6 +27,7 @@ use derefs::MyBox;
 // static GLOBAL: Jemalloc = Jemalloc;
 
 mod trait_tests;
+use trait_tests::Complex;
 
 fn main() {
     let a = ();
@@ -458,12 +459,23 @@ fn main() {
         r
     });
 
-    // error[E0382]: borrow of moved value: `rec`
-    // println!("{:?}", rec);
     println!("{:?}", option1);
 
     let result: Result<i64, std::fmt::Error> =
         <i32 as trait_tests::Associated>::parse("some input");
+
+    let cx1 = Complex {
+        real: 1.0,
+        imagine: 2.0,
+    };
+    let cx2 = Complex {
+        real: 2.0,
+        imagine: 3.0,
+    };
+
+    // println!("{:?}", (cx1 + cx2)); moved
+    println!("{:?}", (&cx1 + &cx2)); // no move
+    println!("{:?}", (cx1 + cx2));
 }
 
 fn speak(name: &str) {
