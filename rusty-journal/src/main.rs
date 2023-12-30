@@ -1,9 +1,8 @@
-use std::path::PathBuf;
-use structopt::StructOpt;
 use crate::cli::{Action, CommandLineArgs};
 use crate::tasks::{add_task, complete_task, list_tasks, Task};
-use home;
 use anyhow::anyhow;
+use std::path::PathBuf;
+use structopt::StructOpt;
 
 mod cli;
 mod tasks;

@@ -29,6 +29,8 @@ use derefs::MyBox;
 mod trait_tests;
 use trait_tests::Complex;
 
+mod ref_tests;
+
 fn main() {
     let a = ();
     let b = (1, "2", 3.0);
@@ -476,6 +478,24 @@ fn main() {
     // println!("{:?}", (cx1 + cx2)); moved
     println!("{:?}", (&cx1 + &cx2)); // no move
     println!("{:?}", (cx1 + cx2));
+
+    ref_tests::refs_print();
+}
+
+fn sum(data: &Vec<u32>) {
+    // 值的地址会改变么？引用的地址会改变么？
+    println!(
+        "value of para     : {:p}, addr of para      : {:p}",
+        data, &data
+    );
+}
+
+fn sum_mut(data: &mut Vec<u32>) {
+    // 值的地址会改变么？引用的地址会改变么？
+    println!(
+        "value of para &mut: {:p}, addr of para &&mut: {:p}",
+        data, &data
+    );
 }
 
 fn speak(name: &str) {
