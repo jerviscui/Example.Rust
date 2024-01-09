@@ -29,6 +29,8 @@ use derefs::MyBox;
 mod trait_tests;
 use trait_tests::Complex;
 
+mod trait_object_tests;
+
 mod ref_tests;
 
 fn main() {
